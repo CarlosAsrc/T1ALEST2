@@ -58,4 +58,27 @@ public class App {
 	}
 
 
+	public static void scanGround() {
+
+		for(int x = 1; x < h; x++) {
+			for(int y = 1; y < w; y++) {
+
+			}
+		}
+
+	}
+
+
+
+
+	public static boolean isMined(int x, int y) {
+		if(mines.containsKey(x)){
+			if(mines.get(x).contains(y)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 }
