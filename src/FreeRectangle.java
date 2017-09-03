@@ -15,7 +15,7 @@ public class FreeRectangle {
 	}
 
 	public void calculateArea() {
-
+		this.area = (pt2x-(pt1x-1)) * (pt2y-(pt1y-1));
 	}
 
 	public int getPt1x() {
