@@ -24,15 +24,23 @@ public class App {
 
 	public static void main(String [] args) {
 		loadData();
+		scanGround();
+		menu();
+	}
+
+	public static void menu() {
+		FreeRectangle r = largestFreeRectangle();
+		System.out.println(r.getArea());
+		System.out.println(r.getPt1x() + ", "+r.getPt1y()+" | "+r.getPt2x()+", "+r.getPt2y());
 	}
 
 	public static void loadData() {
-		Path path = Paths.get("res/caso010");
+		Path path = Paths.get("res/teste.txt");
 		try(Scanner reader = new Scanner(Files.newBufferedReader(path, Charset.forName("utf-8")))) {
 
 			String head [] = reader.nextLine().split(" ");
-			w = Integer.parseInt(head[0]);
-			h = Integer.parseInt(head[1]);
+			h = Integer.parseInt(head[0]);
+			w = Integer.parseInt(head[1]);
 			m = Integer.parseInt(head[2]);
 
 			while(reader.hasNextLine()) {
@@ -78,13 +86,13 @@ public class App {
 						case "both":
 							rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
 							break;
-						case "column":
+						case "line":
 							while(checkNextColumn()) {
 								pt2y++;
 							}
 							rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
 							break;
-						case "line":
+						case "column":
 							while(checkNextLine()) {
 								pt2x++;
 							}
@@ -126,10 +134,10 @@ public class App {
 	}
 
 	public static boolean checkNextLine() {
-		if(pt2x+1 >= h) {
+		if(pt2x+1 > h) {
 			return false;
 		}
-		for(int y = pt2y; y <= pt1y; y--) {
+		for(int y = pt2y; y >= pt1y; y--) {
 			if(isMined(pt2x+1, y)) {
 				return false;
 			}
@@ -138,10 +146,10 @@ public class App {
 	}
 
 	public static boolean checkNextColumn() {
-		if(pt2y+1 >= w) {
+		if(pt2y+1 > w) {
 			return false;
 		}
-		for(int x = pt2x; x <= pt1x; x--) {
+		for(int x = pt2x; x >= pt1x; x--) {
 			if(isMined(x, pt2y+1)) {
 				return false;
 			}
