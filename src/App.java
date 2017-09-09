@@ -18,7 +18,6 @@ public class App {
 	private static int pt1y;
 	private static int pt2x;
 	private static int pt2y;
-	private int area;
 	private static Map<Integer, ArrayList> mines = new HashMap();
 	private static ArrayList<FreeRectangle> rectangles = new ArrayList<>();
 
@@ -61,15 +60,7 @@ public class App {
 		catch(IOException e) {
 			System.out.println("Arquivo não encontrado!");
 		}
-
-//		for(Integer x: minas.keySet()) {
-//			ArrayList minasNaLinhaX = minas.get(x);
-//			for(Object y: minasNaLinhaX) {
-//				System.out.println(x+", "+y);
-//			}
-//		}
 	}
-
 
 	public static void scanGround() {
 		String newArea;
