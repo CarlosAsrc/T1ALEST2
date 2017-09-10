@@ -16,10 +16,7 @@ public class App {
 	private static int w;
 	private static int h;
 	private static int m;
-	private static int pt1x;
-	private static int pt1y;
-	private static int pt2x;
-	private static int pt2y;
+
 	private int area;
 
 	private static List<Mine> dataMines = new ArrayList<>();
@@ -30,14 +27,17 @@ public class App {
 		loadData();
 		Collections.sort(dataMines);
 		defineMines();
+		findRectangles();
+
 		menu();
 	}
 
 	public static void menu() {
-//		FreeRectangle r = largestFreeRectangle();
-		listElements(dataMines);
-		System.out.println("\n\n\n-----------------------------\n\n\n");
-		listElements(mines);
+		FreeRectangle r = largestFreeRectangle();
+//		listElements(dataMines);
+//		System.out.println("\n\n\n-----------------------------\n\n\n");
+//		listElements(mines);
+		System.out.println(r.toString());
 	}
 
 	public static void listElements(List<Mine> dataMines) {
@@ -89,6 +89,86 @@ public class App {
 		}
 	}
 
+
+	public static void findRectangles() {
+		int pt1x, pt1y, pt2x, pt2y;
+
+		for(Mine base: mines) {
+
+			//Retângulo horizontal à esquerda:
+			if(base.getEmptySpacesLeft() > 0) {
+				pt1x = 1;
+				pt1y = 1;
+				pt2x = h;
+				pt2y = base.getY()-1;
+				for(Mine m: mines) {
+					if(!m.equals(base) && m.getY() < base.getY()) {
+						if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
+						else
+						if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+						else
+						if(m.getX() == base.getX()) {pt1y = m.getY()+1;}
+					}
+				}
+				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+			}
+
+			//Retângulo horizontal à direita:
+			if(base.getEmptySpacesRight() > 0) {
+				pt1x = 1;
+				pt1y = base.getY()+1;
+				pt2x = h;
+				pt2y = w;
+				for(Mine m: mines) {
+					if(!m.equals(base) && m.getY() > base.getY()) {
+						if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
+						else
+						if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+						else
+						if(m.getX() == base.getX()) {pt2y = m.getY()+1;}
+					}
+				}
+				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+			}
+
+			//Retângulo horizontal acima:
+			if(base.getX() != 1) {
+				pt1x = 1;
+				pt1y = 1;
+				pt2x = base.getX()-1;
+				pt2y = w;
+				for(Mine m: mines) {
+					if(!m.equals(base) && m.getX() < base.getX()) {
+						if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
+						else
+						if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+						else
+						if(m.getX() == base.getX()) {pt1x = m.getX()+1;}
+					}
+				}
+				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+			}
+
+			//Retângulo horizontal abaixo:
+			if(base.getX() != h) {
+				pt1x = base.getX()+1;
+				pt1y = 1;
+				pt2x = h;
+				pt2y = w;
+				for(Mine m: mines) {
+					if(!m.equals(base) && m.getX() > base.getX()) {
+						if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
+						else
+						if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+						else
+						if(m.getX() == base.getX()) {pt1x = m.getX()-1;}
+					}
+				}
+				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+			}
+		}
+	}
+
 	public static FreeRectangle largestFreeRectangle() {
 		int largestArea = 0;
 		int area;
@@ -102,53 +182,4 @@ public class App {
 		}
 		return result;
 	}
-
-
-//	public static String checkNewArea() {
-//		if(isMined(pt2x+1, pt2y+1)) {
-//			return "intersection";
-//		}
-//		boolean columnFree = checkNextColumn();
-//		boolean lineFree = checkNextLine();
-//
-//		if(!columnFree && !lineFree) {return "both";}
-//		if(!columnFree && lineFree) {return "column";}
-//		if(columnFree && !lineFree) {return "line";}
-//		return "free";
-//	}
-//
-//	public static boolean checkNextLine() {
-//		if(pt2x+1 > h) {
-//			return false;
-//		}
-//		for(int y = pt2y; y >= pt1y; y--) {
-//			if(isMined(pt2x+1, y)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-//
-//	public static boolean checkNextColumn() {
-//		if(pt2y+1 > w) {
-//			return false;
-//		}
-//		for(int x = pt2x; x >= pt1x; x--) {
-//			if(isMined(x, pt2y+1)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-
-
-
-//	public static boolean isMined(int x, int y) {
-//		if(mines.containsKey(x)){
-//			if(mines.get(x).contains(y)){
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
 }

@@ -53,4 +53,10 @@ public class FreeRectangle {
 	public int getArea() {
 		return area;
 	}
+
+	@Override
+	public String toString() {
+		return "FreeRectangle [pt1x=" + pt1x + ", pt1y=" + pt1y + ", pt2x=" + pt2x + ", pt2y=" + pt2y + ", area=" + area
+				+ "]";
+	}
 }
