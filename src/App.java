@@ -82,9 +82,9 @@ public class App {
 			pt2y = w;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getX() < base.getX()) {
-					if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
+					if(m.getY() < base.getY() && m.getY() >= pt1y) { pt1y = m.getY()+1;}
 					else
-					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+					if(m.getY() > base.getY() && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 					else
 					if(m.getY() == base.getY()) {pt1x = m.getX()+1;}
 				}
@@ -102,9 +102,9 @@ public class App {
 			pt2y = w;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getX() > base.getX()) {
-					if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
+					if(m.getY() < base.getY() && m.getY() >= pt1y) { pt1y = m.getY()+1;}
 					else
-					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+					if(m.getY() > base.getY() && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 					else
 					if(m.getY() == base.getY()) {pt2x = m.getX()-1;}
 				}
@@ -162,7 +162,7 @@ public class App {
 			pt2y = w;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getX() < base.getX()) {
-					if(m.getX() != base.getX()-1) {pt1x = m.getX()+1;}
+					if(m.getX() != base.getX()-1 && m.getX() >= pt1x) {pt1x = m.getX()+1;}
 					else
 					if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
 					else
@@ -182,7 +182,7 @@ public class App {
 			pt2y = w;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getX() > base.getX()) {
-					if(m.getX() != base.getX()+1) {pt2x = m.getX()-1;}
+					if(m.getX() != base.getX()+1 && m.getX() <= pt2x) {pt2x = m.getX()-1;}
 					else
 					if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
 					else
@@ -202,7 +202,7 @@ public class App {
 			pt2y = base.getY()-1;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getY() < base.getY()) {
-					if(m.getY() != base.getY()-1) {pt1y = m.getY()+1;}
+					if(m.getY() != base.getY()-1 && m.getY() >= pt1y) {pt1y = m.getY()+1;}
 					else
 					if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
 					else
@@ -222,7 +222,7 @@ public class App {
 			pt2y = w;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getY() > base.getY()) {
-					if(m.getY() != base.getY()+1) {pt2y = m.getY()-1;}
+					if(m.getY() != base.getY()+1 && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 					else
 					if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
 					else
