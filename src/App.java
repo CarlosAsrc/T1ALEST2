@@ -16,39 +16,30 @@ public class App {
 	private static int w;
 	private static int h;
 	private static int m;
+	private static int pt1x;
+	private static int pt1y;
+	private static int pt2x;
+	private static int pt2y;
 
-	private int area;
-
-	private static List<Mine> dataMines = new ArrayList<>();
-	private static ArrayList<Mine> mines = new ArrayList<>();
+	private static List<Mine> mines = new ArrayList<>();
 	private static ArrayList<FreeRectangle> rectangles = new ArrayList<>();
 
 	public static void main(String [] args) {
 		loadData();
-		Collections.sort(dataMines);
-		defineMines();
+		Collections.sort(mines);
 		findRectangles();
-//		listElements(mines);
+		mines.forEach(m -> {System.out.println(m.toString());});
 		menu();
 	}
 
 	public static void menu() {
 		FreeRectangle r = largestFreeRectangle();
-//		listElements(dataMines);
-//		System.out.println("\n\n\n-----------------------------\n\n\n");
-//		listElements(mines);
 		System.out.println(r.toString());
-	}
-
-	public static void listElements(List<Mine> dataMines) {
-		for(Mine m: dataMines) {
-			System.out.println(m.toString());
-		}
 	}
 
 
 	public static void loadData() {
-		Path path = Paths.get("res/caso100");
+		Path path = Paths.get("res/teste.txt");
 		try(Scanner reader = new Scanner(Files.newBufferedReader(path, Charset.forName("utf-8")))) {
 
 			String head [] = reader.nextLine().split(" ");
@@ -60,7 +51,7 @@ public class App {
 				String pos[] = reader.nextLine().split(" ");
 				int x = Integer.parseInt(pos[0]);
 				int y = Integer.parseInt(pos[1]);
-				dataMines.add(new Mine(x, y));
+				mines.add(new Mine(x, y));
 			}
 		}
 		catch(IOException e) {
@@ -68,178 +59,180 @@ public class App {
 		}
 	}
 
-
-	public static void defineMines() {
-		for(Mine m: dataMines) {
-			int x = m.getX();
-			int y = m.getY();
-			long emptySpacesLeft;
-			long emptySpacesRight;
-			if(!mines.isEmpty()) {
-				emptySpacesLeft = ( ((x - mines.get((mines.size()-1)).getX()) - 1) * w) + (y-1) + (w - mines.get((mines.size()-1)).getY());
-				mines.get(mines.size()-1).setEmptySpacesRight(emptySpacesLeft);
-			} else {
-				emptySpacesLeft = ((x-1) * w) + (y-1);
-			}
-			emptySpacesRight = ((h-x) * w) + (w - y);
-			mines.add(new Mine(x, y, emptySpacesLeft, emptySpacesRight));
-		}
-	}
-
-
 	public static void findRectangles() {
-		int pt1x, pt1y, pt2x, pt2y;
-
 		for(Mine base: mines) {
+			horizontalRectangleAbove(base);
+			horizontalRectangleBelow(base);
+			horizontalRectangleLeft(base);
+			horizontalRectangleRight(base);
 
-			//Retângulo horizontal à esquerda:
-			if(base.getEmptySpacesLeft() > 0) {
-				pt1x = 1;
-				pt1y = 1;
-				pt2x = h;
-				pt2y = base.getY()-1;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getY() < base.getY()) {
-						if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
-						else
-						if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
-						else
-						if(m.getX() == base.getX()) {pt1y = m.getY()+1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
-
-			//Retângulo horizontal à direita:
-			if(base.getEmptySpacesRight() > 0) {
-				pt1x = 1;
-				pt1y = base.getY()+1;
-				pt2x = h;
-				pt2y = w;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getY() > base.getY()) {
-						if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
-						else
-						if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
-						else
-						if(m.getX() == base.getX()) {pt2y = m.getY()-1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
-
-			//Retângulo horizontal acima:
-			if(base.getX() != 1) {
-				pt1x = 1;
-				pt1y = 1;
-				pt2x = base.getX()-1;
-				pt2y = w;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getX() < base.getX()) {
-						if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
-						else
-						if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
-						else
-						if(m.getY() == base.getY()) {pt1x = m.getX()+1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
-
-			//Retângulo horizontal abaixo:
-			if(base.getX() != h) {
-				pt1x = base.getX()+1;
-				pt1y = 1;
-				pt2x = h;
-				pt2y = w;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getX() > base.getX()) {
-						if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
-						else
-						if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
-						else
-						if(m.getY() == base.getY()) {pt2x = m.getX()-1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
-
-
-			//Retângulo vertical acima:
-			if(base.getX() != 1) {
-				pt1x = 1;
-				pt1y = 1;
-				pt2x = base.getX()-1;
-				pt2y = w;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getX() < base.getX()) {
-						if(m.getX() != base.getX()-1) {pt1x = m.getX()+1;}
-						else
-						if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
-						else
-						if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
-
-			//Retângulo vertical abaixo:
-			if(base.getX() != h) {
-				pt1x = base.getX()+1;
-				pt1y = 1;
-				pt2x = h;
-				pt2y = w;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getX() > base.getX()) {
-						if(m.getX() != base.getX()+1) {pt2x = m.getX()-1;}
-						else
-						if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
-						else
-						if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
-
-
-
-			//Retângulo horizontal à direita:
-			if(base.getEmptySpacesRight() > 0) {
-				pt1x = 1;
-				pt1y = base.getY()+1;
-				pt2x = h;
-				pt2y = w;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getY() > base.getY()) {
-						if(m.getY() != base.getY()+1) {pt2y = m.getY()-1;}
-						else
-						if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
-						else
-						if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
-
-			//Retângulo horizontal à direita:
-			if(base.getEmptySpacesLeft() > 0) {
-				pt1x = 1;
-				pt1y = 1;
-				pt2x = h;
-				pt2y = base.getY()-1;
-				for(Mine m: mines) {
-					if(!m.equals(base) && m.getY() < base.getY()) {
-						if(m.getY() != base.getY()-1) {pt1y = m.getY()+1;}
-						else
-						if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
-						else
-						if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
-					}
-				}
-				rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
-			}
+			verticalRectangleAbove(base);
+			verticalRectangleBelow(base);
+			verticalRectangleLeft(base);
+			verticalRectangleRight(base);
 		}
 	}
+
+	public static void horizontalRectangleAbove(Mine base) {
+		//Retângulo horizontal acima:
+		if(base.getX() > 1) {
+			pt1x = 1;
+			pt1y = 1;
+			pt2x = base.getX()-1;
+			pt2y = w;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getX() < base.getX()) {
+					if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
+					else
+					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+					else
+					if(m.getY() == base.getY()) {pt1x = m.getX()+1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
+	public static void horizontalRectangleBelow(Mine base) {
+		//Retângulo horizontal abaixo:
+		if(base.getX() < h) {
+			pt1x = base.getX()+1;
+			pt1y = 1;
+			pt2x = h;
+			pt2y = w;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getX() > base.getX()) {
+					if(m.getY() < base.getY()) { pt1y = m.getY()+1;}
+					else
+					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+					else
+					if(m.getY() == base.getY()) {pt2x = m.getX()-1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
+	public static void horizontalRectangleLeft(Mine base) {
+		//Retângulo horizontal à esquerda:
+		if(base.getY() > 1) {
+			pt1x = 1;
+			pt1y = 1;
+			pt2x = h;
+			pt2y = base.getY()-1;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getY() < base.getY()) {
+					if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
+					else
+					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+					else
+					if(m.getX() == base.getX()) {pt1y = m.getY()+1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
+	public static void horizontalRectangleRight(Mine base) {
+		//Retângulo horizontal à direita:
+		if(base.getY() < w) {
+			pt1x = 1;
+			pt1y = base.getY()+1;
+			pt2x = h;
+			pt2y = w;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getY() > base.getY()) {
+					if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
+					else
+					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+					else
+					if(m.getX() == base.getX()) {pt2y = m.getY()-1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
+	public static void verticalRectangleAbove(Mine base) {
+		//Retângulo vertical acima:
+		if(base.getX() > 1) {
+			pt1x = 1;
+			pt1y = 1;
+			pt2x = base.getX()-1;
+			pt2y = w;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getX() < base.getX()) {
+					if(m.getX() != base.getX()-1) {pt1x = m.getX()+1;}
+					else
+					if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
+					else
+					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
+	public static void verticalRectangleBelow(Mine base) {
+		//Retângulo vertical abaixo:
+		if(base.getX() < h) {
+			pt1x = base.getX()+1;
+			pt1y = 1;
+			pt2x = h;
+			pt2y = w;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getX() > base.getX()) {
+					if(m.getX() != base.getX()+1) {pt2x = m.getX()-1;}
+					else
+					if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
+					else
+					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
+	public static void verticalRectangleLeft(Mine base) {
+		//Retângulo vertical à esquerda:
+		if(base.getY() > 1) {
+			pt1x = 1;
+			pt1y = 1;
+			pt2x = h;
+			pt2y = base.getY()-1;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getY() < base.getY()) {
+					if(m.getY() != base.getY()-1) {pt1y = m.getY()+1;}
+					else
+					if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
+					else
+					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
+	public static void verticalRectangleRight(Mine base) {
+		//Retângulo vertical à direita:
+		if(base.getY() < w) {
+			pt1x = 1;
+			pt1y = base.getY()+1;
+			pt2x = h;
+			pt2y = w;
+			for(Mine m: mines) {
+				if(!m.equals(base) && m.getY() > base.getY()) {
+					if(m.getY() != base.getY()+1) {pt2y = m.getY()-1;}
+					else
+					if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
+					else
+					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+				}
+			}
+			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
+		}
+	}
+
 
 	public static FreeRectangle largestFreeRectangle() {
 		int largestArea = 0;
