@@ -86,7 +86,7 @@ public class App {
 					else
 					if(m.getY() > base.getY() && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 					else
-					if(m.getY() == base.getY()) {pt1x = m.getX()+1;}
+					if(m.getY() == base.getY() && m.getX() >= pt1x) {pt1x = m.getX()+1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
@@ -106,7 +106,7 @@ public class App {
 					else
 					if(m.getY() > base.getY() && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 					else
-					if(m.getY() == base.getY()) {pt2x = m.getX()-1;}
+					if(m.getY() == base.getY() && m.getX() <= pt2x) {pt2x = m.getX()-1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
@@ -122,11 +122,11 @@ public class App {
 			pt2y = base.getY()-1;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getY() < base.getY()) {
-					if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
+					if(m.getX() < base.getX() && m.getX() >= pt1x) { pt1x = m.getX()+1;}
 					else
-					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+					if(m.getX() > base.getX() && m.getX() <= pt2x) {pt2x = m.getX()-1;}
 					else
-					if(m.getX() == base.getX()) {pt1y = m.getY()+1;}
+					if(m.getX() == base.getX() && m.getY() >= pt1y) {pt1y = m.getY()+1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
@@ -142,11 +142,11 @@ public class App {
 			pt2y = w;
 			for(Mine m: mines) {
 				if(!m.equals(base) && m.getY() > base.getY()) {
-					if(m.getX() < base.getX()) { pt1x = m.getX()+1;}
+					if(m.getX() < base.getX() && m.getX() >= pt1x) { pt1x = m.getX()+1;}
 					else
-					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+					if(m.getX() > base.getX() && m.getX() <= pt2x) {pt2x = m.getX()-1;}
 					else
-					if(m.getX() == base.getX()) {pt2y = m.getY()-1;}
+					if(m.getX() == base.getX() && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
@@ -164,14 +164,16 @@ public class App {
 				if(!m.equals(base) && m.getX() < base.getX()) {
 					if(m.getX() != base.getX()-1 && m.getX() >= pt1x) {pt1x = m.getX()+1;}
 					else
-					if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
+					if(m.getY() < base.getY() && m.getY() >= pt1y) {pt1y = m.getY()+1;}
 					else
-					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+					if(m.getY() > base.getY() && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
 		}
 	}
+	
+	//2584
 
 	public static void verticalRectangleBelow(Mine base) {
 		//Retângulo vertical abaixo:
@@ -184,9 +186,9 @@ public class App {
 				if(!m.equals(base) && m.getX() > base.getX()) {
 					if(m.getX() != base.getX()+1 && m.getX() <= pt2x) {pt2x = m.getX()-1;}
 					else
-					if(m.getY() < base.getY()) {pt1y = m.getY()+1;}
+					if(m.getY() < base.getY() && m.getY() >= pt1y) {pt1y = m.getY()+1;}
 					else
-					if(m.getY() > base.getY()) {pt2y = m.getY()-1;}
+					if(m.getY() > base.getY() && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
@@ -204,9 +206,9 @@ public class App {
 				if(!m.equals(base) && m.getY() < base.getY()) {
 					if(m.getY() != base.getY()-1 && m.getY() >= pt1y) {pt1y = m.getY()+1;}
 					else
-					if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
+					if(m.getX() < base.getX() && m.getX() >= pt1x) {pt1x = m.getX()+1;}
 					else
-					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+					if(m.getX() > base.getX() && m.getX() <= pt2x) {pt2x = m.getX()-1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
@@ -224,9 +226,9 @@ public class App {
 				if(!m.equals(base) && m.getY() > base.getY()) {
 					if(m.getY() != base.getY()+1 && m.getY() <= pt2y) {pt2y = m.getY()-1;}
 					else
-					if(m.getX() < base.getX()) {pt1x = m.getX()+1;}
+					if(m.getX() < base.getX() && m.getX() >= pt1x) {pt1x = m.getX()+1;}
 					else
-					if(m.getX() > base.getX()) {pt2x = m.getX()-1;}
+					if(m.getX() > base.getX() && m.getX() <= pt2x) {pt2x = m.getX()-1;}
 				}
 			}
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
