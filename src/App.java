@@ -25,11 +25,13 @@ public class App {
 	private static ArrayList<FreeRectangle> rectangles = new ArrayList<>();
 
 	public static void main(String [] args) {
+		long tempoInicial = System.currentTimeMillis();
 		loadData();
 		Collections.sort(mines);
 		findRectangles();
-		mines.forEach(m -> {System.out.println(m.toString());});
+		//mines.forEach(m -> {System.out.println(m.toString());});
 		menu();
+		System.out.println("o metodo executou em " + (System.currentTimeMillis() - tempoInicial));
 	}
 
 	public static void menu() {
@@ -39,7 +41,7 @@ public class App {
 
 
 	public static void loadData() {
-		Path path = Paths.get("res/caso001");
+		Path path = Paths.get("res/wallset.txt");
 		try(Scanner reader = new Scanner(Files.newBufferedReader(path, Charset.forName("utf-8")))) {
 
 			String head [] = reader.nextLine().split(" ");
@@ -172,7 +174,7 @@ public class App {
 			rectangles.add(new FreeRectangle(pt1x, pt1y, pt2x, pt2y));
 		}
 	}
-	
+
 	//2584
 
 	public static void verticalRectangleBelow(Mine base) {
