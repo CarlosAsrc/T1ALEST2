@@ -37,11 +37,4 @@ public class Mine implements Comparable<Mine>{
 	public String toString() {
 		return "Mine [x=" + x + ", y=" + y + "]";
 	}
-
-
-
-
-
-
-
 }

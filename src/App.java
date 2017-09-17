@@ -1,21 +1,17 @@
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class App {
 
 	private static int w;
 	private static int h;
-	private static int m;
 	private static int pt1x;
 	private static int pt1y;
 	private static int pt2x;
@@ -24,30 +20,32 @@ public class App {
 	private static List<Mine> mines = new ArrayList<>();
 	private static ArrayList<FreeRectangle> rectangles = new ArrayList<>();
 
+	private static Scanner in = new Scanner (System.in);
+
 	public static void main(String [] args) {
-		long tempoInicial = System.currentTimeMillis();
-		loadData();
-		Collections.sort(mines);
-		findRectangles();
-		//mines.forEach(m -> {System.out.println(m.toString());});
 		menu();
-		System.out.println("o metodo executou em " + (System.currentTimeMillis() - tempoInicial));
 	}
 
 	public static void menu() {
+		System.out.println("Informe o nome do arquivo:");
+		String arq = in.nextLine();
+		long tempoInicial = System.currentTimeMillis();
+		loadData(arq);
+		Collections.sort(mines);
+		findRectangles();
 		FreeRectangle r = largestFreeRectangle();
 		System.out.println(r.toString());
+		System.out.println("Média de tempo gasto: " + (System.currentTimeMillis() - tempoInicial) + " ms");
 	}
 
 
-	public static void loadData() {
-		Path path = Paths.get("res/wallset.txt");
+	public static void loadData(String arq) {
+		Path path = Paths.get("res/"+arq);
 		try(Scanner reader = new Scanner(Files.newBufferedReader(path, Charset.forName("utf-8")))) {
 
 			String head [] = reader.nextLine().split(" ");
 			h = Integer.parseInt(head[0]);
 			w = Integer.parseInt(head[1]);
-			m = Integer.parseInt(head[2]);
 
 			while(reader.hasNextLine()) {
 				String pos[] = reader.nextLine().split(" ");

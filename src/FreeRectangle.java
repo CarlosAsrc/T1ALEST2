@@ -56,7 +56,6 @@ public class FreeRectangle {
 
 	@Override
 	public String toString() {
-		return "FreeRectangle [pt1x=" + pt1x + ", pt1y=" + pt1y + ", pt2x=" + pt2x + ", pt2y=" + pt2y + ", area=" + area
-				+ "]";
+		return "Posição do retângulo:\npt1x = " + pt1x + "	pt1y = " + pt1y + "\npt2x = " + pt2x + "	pt2y = " + pt2y + "\nÁrea=" + area;
 	}
 }
